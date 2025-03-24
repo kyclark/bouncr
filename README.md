@@ -20,6 +20,8 @@ async fn main() {
 }
 ```
 
+![Image 1](/assets/img1.png)
+
 Then I figured out how to draw a single ball:
 
 ```
