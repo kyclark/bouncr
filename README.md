@@ -4,9 +4,7 @@ How to make a basic animation of bouncing balls using Rust and Macroquad.
 
 ## Setup
 
-Follow the instructions at https://www.rust-lang.org/tools/install to install the Rust programming language.
-
-Then:
+[Install Rust](https://www.rust-lang.org/tools/install), then:
 
 ```
 git clone https://github.com/kyclark/bouncr.git
@@ -41,7 +39,7 @@ This produces what appears to be a static image, but in truth the same image is 
 ![Image 1](/assets/img1.png)
 
 My goal is to make a bunch of balls bounce around the screen, so I first figured out how to draw a single ball.
-I found the [https://docs.rs/macroquad/latest/macroquad/shapes/fn.draw_circle.html](draw_circle) function that is included with `macroquad::prelude`:
+I found the [draw_circle](https://docs.rs/macroquad/latest/macroquad/shapes/fn.draw_circle.html) function that is included with `macroquad::prelude`:
 
 ```
 use macroquad::prelude::*;
@@ -64,7 +62,7 @@ As before, this draws the same circle to the same place on the screen over and a
 ![Image 2](/assets/img2.png)
 
 Next, I find want to move the circle back and forth across the screen.
-I store the [https://docs.rs/macroquad/latest/macroquad/window/fn.screen_width.html](screen_width) and create two _mutable_ variables for the current `x` position and the `x_add` value that I'll add on each frame.
+I store the [screen_width](https://docs.rs/macroquad/latest/macroquad/window/fn.screen_width.html) and create two _mutable_ variables for the current `x` position and the `x_add` value that I'll add on each frame.
 This will start as a positive value and will turn negative when the ball hits the right side of the screen (`screen_width`) and positive again when it hits the left side (`0`):
 
 ```
@@ -99,7 +97,7 @@ Here's what that looks like:
 
 ![Movie 1](/assets/mov1.gif)
 
-Next, I do the same for the `y` value using the [https://docs.rs/macroquad/latest/macroquad/window/fn.screen_height.html](screen_height):
+Next, I do the same for the `y` value using the [screen_height](https://docs.rs/macroquad/latest/macroquad/window/fn.screen_height.html):
 
 ```
 use macroquad::prelude::*;
