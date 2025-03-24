@@ -2,13 +2,23 @@ use macroquad::prelude::*;
 
 #[macroquad::main("MyGame")]
 async fn main() {
+    let w = screen_width();
+    let diameter = 10.0;
+    let mut x = 30.0;
+    let mut x_add = 1.0;
+
     loop {
-        clear_background(RED);
+        clear_background(BLACK);
 
-        draw_line(40.0, 40.0, 100.0, 200.0, 15.0, BLUE);
-        draw_rectangle(screen_width() / 2.0 - 60.0, 100.0, 120.0, 60.0, GREEN);
+        draw_circle(x, 40.0, diameter, RED);
 
-        draw_text("Hello, Macroquad!", 20.0, 20.0, 30.0, DARKGRAY);
+        if x + diameter / 2.0 == w {
+            x_add = -1.0;
+        } else if x - diameter / 2.0 == 0.0 {
+            x_add = 1.0;
+        }
+
+        x += x_add;
 
         next_frame().await
     }

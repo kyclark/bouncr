@@ -1,5 +1,13 @@
 # Bouncy balls in Rust
 
+How to make a basic animation of bouncing balls using Rust and Macroquad.
+
+## Setup
+
+Follow the instructions at https://www.rust-lang.org/tools/install to install the Rust programming language.
+
+## Explanation
+
 I started with the example from https://macroquad.rs/:
 
 ```
@@ -20,9 +28,12 @@ async fn main() {
 }
 ```
 
+This produces what appears to be a static image, but in truth the same image is being drawn to the screen repeatedly:
+
 ![Image 1](/assets/img1.png)
 
-Then I figured out how to draw a single ball:
+My goal is to make a bunch of balls bounce around the screen, so I first figured out how to draw a single ball.
+I found the [https://docs.rs/macroquad/latest/macroquad/shapes/fn.draw_circle.html](draw_circle) function that is included with `macroquad::prelude`:
 
 ```
 use macroquad::prelude::*;
@@ -39,7 +50,14 @@ async fn main() {
 }
 ```
 
-Then I move it back and forth in the screen width:
+As before, this draws the same circle to the same place on the screen over and again:
+
+
+![Image 2](/assets/img2.png)
+
+Next, I find want to move the circle back and forth across the screen.
+I store the [https://docs.rs/macroquad/latest/macroquad/window/fn.screen_width.html](screen_width) and create two _mutable_ variables for the current `x` position and the `x_add` value that I'll add on each frame.
+This will start as a positive value and will turn negative when the ball hits the right side of the screen (`screen_width`) and positive again when it hits the left side (`0`):
 
 ```
 use macroquad::prelude::*;
@@ -68,6 +86,10 @@ async fn main() {
     }
 }
 ```
+
+Here's what that looks like:
+
+![Movie 1](/assets/mov1.gif)
 
 Do the same for the `y` value:
 
