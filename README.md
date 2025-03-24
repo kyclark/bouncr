@@ -6,6 +6,14 @@ How to make a basic animation of bouncing balls using Rust and Macroquad.
 
 Follow the instructions at https://www.rust-lang.org/tools/install to install the Rust programming language.
 
+Then:
+
+```
+git clone https://github.com/kyclark/bouncr.git
+cd bouncr
+cargo run
+```
+
 ## Explanation
 
 I started with the example from https://macroquad.rs/:
