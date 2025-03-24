@@ -91,7 +91,7 @@ Here's what that looks like:
 
 ![Movie 1](/assets/mov1.gif)
 
-Do the same for the `y` value:
+Next, I do the same for the `y` value using the [https://docs.rs/macroquad/latest/macroquad/window/fn.screen_height.html](screen_height):
 
 ```
 use macroquad::prelude::*;
@@ -101,6 +101,7 @@ async fn main() {
     let w = screen_width();
     let h = screen_height();
     let diameter = 10.0;
+    let radius = diameter / 2.0;
     let mut x = 30.0;
     let mut x_add = 1.0;
     let mut y = 40.0;
@@ -111,16 +112,12 @@ async fn main() {
 
         draw_circle(x, y, diameter, RED);
 
-        if x + diameter / 2.0 == w {
-            x_add = -1.0;
-        } else if x - diameter / 2.0 == 0.0 {
-            x_add = 1.0;
+        if x + radius == w || x - radius == 0.0 {
+            x_add *= -1.0;
         }
 
-        if y + diameter / 2.0 == h {
-            y_add = -1.0;
-        } else if y - diameter / 2.0 == 0.0 {
-            y_add = 1.0;
+        if y + radius == h || y - radius == 0.0 {
+            y_add *= -1.0;
         }
 
         x += x_add;
@@ -131,7 +128,15 @@ async fn main() {
 }
 ```
 
-Create a `Ball` to encapsulate all the stuff for drawing and moving a single ball:
+I want to have lots of balls, so I need some way to represent the idea of one of them.
+I can create a Rust `struct` called a `Ball` to encapsulate all the stuff for drawing and moving a single ball.
+The `impl` (implementation) block has the functions:
+* `new`: create a ball at some position with some diameter
+* `render`: draw the ball on the screen
+* `shift`: move the ball
+
+The `main` function will still create just one ball.
+The behavior is the same as before, but now the `main` function is much smaller because all the complexity is hidden inside the `Ball`:
 
 ```
 use macroquad::prelude::*;
@@ -195,7 +200,9 @@ async fn main() {
 }
 ```
 
-Now let's make lots of balls with random starting points and sizes and colors moving in different directions:
+Now I can make lots of balls with random starting points and sizes and colors moving in different directions.
+The `Ball` gets a little more complicated as I need to accept the ball's number along with a random number generator (RNG) for getting random values for `x`/`y` and diameter and color values.
+The `rand` module conflicts with some of the exports from `macroquad`, so I'll be more explicit about what I want to import:
 
 ```
 use macroquad::{
@@ -277,7 +284,7 @@ async fn main() {
 }
 ```
 
-Make them disappear when two collide:
+I thought it would be interesting to have a collision between two balls result in their disappearance or having them bounce off each other:
 
 ```
 use macroquad::{
@@ -349,16 +356,21 @@ impl Ball {
         self.y += self.y_add;
     }
 
+    fn reverse(&mut self) {
+        self.x_add *= -1.0;
+        self.y_add *= -1.0;
+    }
+
     fn collides(&self, other: &Ball) -> bool {
         let x_dist = (self.x - other.x).abs();
         let y_dist = (self.y - other.y).abs();
-        let diameter = self.diameter.max(other.diameter);
+        let dist = (x_dist.powi(2) + y_dist.powi(2)).sqrt();
+        let radii = self.radius + other.radius;
 
         self.number != other.number
             && self.visible
             && other.visible
-            && x_dist <= diameter
-            && y_dist <= diameter
+            && dist <= radii
     }
 }
 
@@ -389,9 +401,12 @@ async fn main() {
                 }
             }
         }
-        remove.sort();
         for i in remove {
-            balls[i].visible = false;
+            // Either make the balls disappear
+            // balls[i].visible = false;
+
+            // Or have them bounce off each other
+            balls[i].reverse();
         }
         next_frame().await
     }
