@@ -10,7 +10,7 @@ struct Ball {
     number: usize,
     x: f32,
     y: f32,
-    diameter: f32,
+    speed: f32,
     radius: f32,
     x_add: f32,
     y_add: f32,
@@ -27,13 +27,12 @@ impl Ball {
         max_x: f32,
         max_y: f32,
     ) -> Self {
-        let diameter = rng.random_range(3.0..10.0);
         Ball {
             number,
             x: rng.random_range(0.0..max_x),
             y: rng.random_range(0.0..max_y),
-            diameter,
-            radius: diameter / 2.0,
+            speed: rng.random_range(0.0..1.0),
+            radius: rng.random_range(3.0..10.0),
             x_add: if rng.random_bool(0.5) { 1.0 } else { -1.0 },
             y_add: if rng.random_bool(0.5) { 1.0 } else { -1.0 },
             max_x,
@@ -50,7 +49,7 @@ impl Ball {
 
     fn render(&self) {
         if self.visible {
-            draw_circle(self.x, self.y, self.diameter, self.color);
+            draw_circle(self.x, self.y, self.radius, self.color);
         }
     }
 
@@ -63,8 +62,8 @@ impl Ball {
             self.y_add *= -1.0;
         }
 
-        self.x += self.x_add;
-        self.y += self.y_add;
+        self.x += self.x_add * self.speed;
+        self.y += self.y_add * self.speed;
     }
 
     fn reverse(&mut self) {
