@@ -71,18 +71,18 @@ use macroquad::prelude::*;
 #[macroquad::main("MyGame")]
 async fn main() {
     let w = screen_width();
-    let diameter = 10.0;
+    let radius = 10.0;
     let mut x = 30.0;
     let mut x_add = 1.0;
 
     loop {
         clear_background(BLACK);
 
-        draw_circle(x, 40.0, diameter, RED);
+        draw_circle(x, 40.0, radius, RED);
 
-        if x + diameter / 2.0 == w {
+        if x + radius == w {
             x_add = -1.0;
-        } else if x - diameter / 2.0 == 0.0 {
+        } else if x - radius == 0.0 {
             x_add = 1.0;
         }
 
@@ -106,8 +106,7 @@ use macroquad::prelude::*;
 async fn main() {
     let w = screen_width();
     let h = screen_height();
-    let diameter = 10.0;
-    let radius = diameter / 2.0;
+    let radius = 10.0;
     let mut x = 30.0;
     let mut x_add = 1.0;
     let mut y = 40.0;
@@ -116,7 +115,7 @@ async fn main() {
     loop {
         clear_background(BLACK);
 
-        draw_circle(x, y, diameter, RED);
+        draw_circle(x, y, radius, RED);
 
         if x + radius == w || x - radius == 0.0 {
             x_add *= -1.0;
@@ -151,7 +150,6 @@ use macroquad::prelude::*;
 struct Ball {
     x: f32,
     y: f32,
-    diameter: f32,
     radius: f32,
     x_add: f32,
     y_add: f32,
@@ -160,12 +158,11 @@ struct Ball {
 }
 
 impl Ball {
-    fn new(x: f32, y: f32, width: f32, height: f32, diameter: f32) -> Self {
+    fn new(x: f32, y: f32, width: f32, height: f32, radius: f32) -> Self {
         Ball {
             x,
             y,
-            diameter,
-            radius: diameter / 2.0,
+            radius,
             x_add: 1.0,
             y_add: 1.0,
             max_x: width,
@@ -174,7 +171,7 @@ impl Ball {
     }
 
     fn render(&self) {
-        draw_circle(self.x, self.y, self.diameter, RED);
+        draw_circle(self.x, self.y, self.radius, RED);
     }
 
     fn shift(&mut self) {
