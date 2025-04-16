@@ -136,7 +136,7 @@ async fn main() {
 I want to have lots of balls, so I need some way to represent the idea of one of them.
 I can create a Rust `struct` called a `Ball` to encapsulate all the stuff for drawing and moving a single ball.
 The `impl` (implementation) block has the functions:
-* `new`: create a ball at some position with some diameter
+* `new`: create a ball at some position with some radius
 * `render`: draw the ball on the screen
 * `shift`: move the ball
 
@@ -204,7 +204,7 @@ async fn main() {
 ```
 
 Now I can make lots of balls with random starting points and sizes and colors moving in different directions.
-The `Ball` gets a little more complicated as I need to accept the ball's number along with a random number generator (RNG) for getting random values for `x`/`y` and diameter and color values.
+The `Ball` gets a little more complicated as I need to accept the ball's number along with a random number generator (RNG) for getting random values for `x`/`y` and radius and color values.
 The `rand` module conflicts with some of the exports from `macroquad`, so I'll be more explicit about what I want to import:
 
 ```
@@ -219,7 +219,6 @@ use rand::Rng;
 struct Ball {
     x: f32,
     y: f32,
-    diameter: f32,
     radius: f32,
     x_add: f32,
     y_add: f32,
@@ -230,12 +229,11 @@ struct Ball {
 
 impl Ball {
     fn new(rng: &mut impl Rng, max_x: f32, max_y: f32) -> Self {
-        let diameter = rng.random_range(3.0..10.0);
+        let radius = rng.random_range(3.0..10.0);
         Ball {
             x: rng.random_range(0.0..max_x),
             y: rng.random_range(0.0..max_y),
-            diameter,
-            radius: diameter / 2.0,
+            radius,
             x_add: if rng.random_bool(0.5) { 1.0 } else { -1.0 },
             y_add: if rng.random_bool(0.5) { 1.0 } else { -1.0 },
             max_x,
@@ -250,7 +248,7 @@ impl Ball {
     }
 
     fn render(&self) {
-        draw_circle(self.x, self.y, self.diameter, self.color);
+        draw_circle(self.x, self.y, self.radius, self.color);
     }
 
     fn shift(&mut self) {
@@ -302,7 +300,6 @@ struct Ball {
     number: usize,
     x: f32,
     y: f32,
-    diameter: f32,
     radius: f32,
     x_add: f32,
     y_add: f32,
@@ -319,13 +316,12 @@ impl Ball {
         max_x: f32,
         max_y: f32,
     ) -> Self {
-        let diameter = rng.random_range(3.0..10.0);
+        let radius = rng.random_range(3.0..10.0);
         Ball {
             number,
             x: rng.random_range(0.0..max_x),
             y: rng.random_range(0.0..max_y),
-            diameter,
-            radius: diameter / 2.0,
+            radius,
             x_add: if rng.random_bool(0.5) { 1.0 } else { -1.0 },
             y_add: if rng.random_bool(0.5) { 1.0 } else { -1.0 },
             max_x,
@@ -342,7 +338,7 @@ impl Ball {
 
     fn render(&self) {
         if self.visible {
-            draw_circle(self.x, self.y, self.diameter, self.color);
+            draw_circle(self.x, self.y, self.radius, self.color);
         }
     }
 
